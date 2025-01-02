@@ -25,7 +25,6 @@ void initialize(int &MM, int &DD, int &YYYY) {
 }
 
 void algo(int MM, int DD, int YYYY, int &doomsday) {
-    // Step 1: Calculate the century's anchor day
     int century = YYYY / 100;
     int centuryAnchor;
     switch (century % 4) {
@@ -38,21 +37,15 @@ void algo(int MM, int DD, int YYYY, int &doomsday) {
         case 3: centuryAnchor = 3;
             break;
     }
-
-    // Step 2: Calculate year's contribution to the doomsday
     int yearPart = YYYY % 100;
     int yearContribution = (yearPart / 12) + (yearPart % 12) + ((yearPart % 12) / 4);
-
-    // Step 3: Combine century anchor and year contribution
     int baseDoomsday = (centuryAnchor + yearContribution) % 7;
-
-    // Step 4: Use month-specific doomsday references
     int monthDoomsday;
     switch (MM) {
         case 1: monthDoomsday = (YYYY % 4 == 0 && (YYYY % 100 != 0 || YYYY % 400 == 0)) ? 4 : 3;
-            break; // Jan: 4 if leap year, 3 otherwise
+            break;
         case 2: monthDoomsday = (YYYY % 4 == 0 && (YYYY % 100 != 0 || YYYY % 400 == 0)) ? 29 : 28;
-            break; // Feb: 29 if leap year, 28 otherwise
+            break;
         case 3: monthDoomsday = 14;
             break;
         case 4: monthDoomsday = 4;
@@ -76,10 +69,8 @@ void algo(int MM, int DD, int YYYY, int &doomsday) {
         default: monthDoomsday = 0;
             break;
     }
-
-    // Step 5: Calculate the offset and final doomsday
     doomsday = (baseDoomsday + (DD - monthDoomsday)) % 7;
-    if (doomsday < 0) doomsday += 7; // Ensure positive result
+    if (doomsday < 0) doomsday += 7;
 }
 
 std::string dayOfWeek(int doomsday) {
